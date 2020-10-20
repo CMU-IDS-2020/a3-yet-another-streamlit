@@ -54,7 +54,7 @@ chart = alt.hconcat(
 ).transform_bin(
     "Prismatic coefficient",
     field="Prismatic coefficient",
-    bin=alt.Bin(step=0.01)
+    bin=alt.Bin(step=0.02)
 )
 
 st.write(chart)
