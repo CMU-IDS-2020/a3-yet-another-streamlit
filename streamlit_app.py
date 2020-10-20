@@ -6,7 +6,7 @@ st.title("Let's analyze some Yacht Data 🐧📊.")
 
 @st.cache  # add caching so we load the data only once
 def load_data():
-    # Load the Auto MPG data from https://github.com/allisonhorst/palmerpenguins.
+    # Load the Yacht data from https://github.com/allisonhorst/palmerpenguins.
     yacht_url = "https://raw.githubusercontent.com/CMU-IDS-2020/a3-yet-another-streamlit/master/yacht_hydrodynamics.data"
     return pd.read_csv(yacht_url, delim_whitespace=True, names=[
         'buoyancy position',
