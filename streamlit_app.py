@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 import numpy as np
+from interactive_polynomial import interactive_polynomial
 
 st.title("Let's analyze some Yacht Data ⛴📊.")
 
@@ -78,22 +79,21 @@ chart = alt.hconcat(
 
 st.write(chart)
 
-st.write("Hmm 🤔, is there some correlation between residuary resistance and froude number?")
+st.write("Hmm 🤔, is there some correlation between residuary resistance and other features?")
+
+test = st.selectbox(options=df.columns[:-2], label='Feature selection')
 
 pts = alt.selection(type="interval", encodings=["x"])
 
 points = alt.Chart().mark_point().encode(
     x='Froude number',
-    y='Residuary resistance',
-    color=alt.Y('Length-beam ratio', type='nominal')
+    y='Residuary resistance'
 ).transform_filter(
     pts
 ).properties(
     width=300,
     height=300
 ).interactive()
-
-test = 'Length-displacement ratio'
 
 mag = alt.Chart().mark_bar().encode(
     x=alt.X(test+':N', axis=alt.Axis(format='.3f')),
@@ -112,6 +112,10 @@ chart = alt.hconcat(
     test,
     field=test,
     bin=alt.Bin(step=0.01)
-)
+).resolve_scale(color='independent')
 
 st.write(chart)
+
+st.write("Let's have fun with linear regression!")
+
+interactive_polynomial(df.iloc[:, :-1].to_numpy(), df.iloc[:, -1].to_numpy(), df.columns[:-1], df.columns[-1])
