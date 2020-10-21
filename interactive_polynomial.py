@@ -160,10 +160,10 @@ def interactive_polynomial(feat_X, feat_y, variable_names, measure_name):
     # at last, write everything to streamlit UI.
     st.write(curr_chart)
 
-
-n_sample = 100
-X = np.random.randn(n_sample, 2)
-y = (X ** 2).sum(axis=1) + np.random.normal(scale=0.2, size=n_sample)
-interactive_polynomial(X, y, ['X1', 'X2'], 'y')
+if __name__ == '__main__':
+    n_sample = 100
+    X = np.random.randn(n_sample, 2)
+    y = (X ** 2).sum(axis=1) + np.random.normal(scale=0.2, size=n_sample)
+    interactive_polynomial(X, y, ['X1', 'X2'], 'y')
                 
 
