@@ -6,7 +6,6 @@ from interactive_polynomial import interactive_polynomial
 
 st.title("Let's analyze some Yacht Data ⛴📊.")
 
-
 @st.cache  # add caching so we load the data only once
 def load_data():
     # Yacht data source: http://archive.ics.uci.edu/ml/datasets/yacht+hydrodynamics.
