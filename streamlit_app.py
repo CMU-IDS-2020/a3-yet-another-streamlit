@@ -46,7 +46,7 @@ text = base.mark_text().encode(
     text='text:O'
 )
 
-select = alt.selection_single(fields=['column-x', 'column-y'], init={'column-x': 'Froude number', 'column-y': 'Residuary resistance'})
+select = alt.selection_single(fields=['column-x', 'column-y'], init={'column-x': 'Froude number', 'column-y': 'Residuary resistance'}, empty='none')
 
 chart = base.mark_rect().encode(
     color='correlation:Q'
@@ -79,7 +79,7 @@ chart = alt.hconcat(
 
 st.write(chart)
 
-st.write("Hmm 🤔, is there some correlation between residuary resistance and other features?")
+st.write("Hmm 🤔, let's bin on other dimensions to investigate the correlation between Residuary resistance and Froude number.")
 
 test = st.selectbox(options=df.columns[:-2], label='Feature selection')
 
