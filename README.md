@@ -1,7 +1,7 @@
 # CMU Interactive Data Science Assigment 3
 
 * **Team members**: yijiez2@andrew.cmu.edu and lichenj@andrew.cmu.edu
-* **Online URL**: https://s4a.streamlit.io/cmu-ids-2020/a3-template/master/streamlit_app.py
+* **Online URL**: https://share.streamlit.io/cmu-ids-2020/a3-yet-another-streamlit
 
 ## Instructions
 
