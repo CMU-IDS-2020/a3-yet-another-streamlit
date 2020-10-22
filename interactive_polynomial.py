@@ -36,7 +36,7 @@ def get_plotline_df(x_range, num_var, num_exp, weights_on_epoch, variable_names,
                 y_values = y_values + prod * weight[idx]
             # add interception
             y_values = y_values + weight[-1]
-            plotline_df[measure_name + " Residual on " + var_name] = y_values
+            plotline_df[measure_name + " | " + var_name] = y_values
         
         epoch_dfs.append(plotline_df)
 
@@ -70,7 +70,7 @@ def get_residual_xy_df(X, y, num_var, num_exp, weights_on_epoch, variable_names,
             weight = weights_on_epoch[epoch_id][0:-1]
             redisuals = X @ (masks[var_id] * weight)
             y_values = y - redisuals
-            plotscat_df[measure_name + " Residual on " + var_name] = y_values
+            plotscat_df[measure_name + " | " + var_name] = y_values
             
         epoch_dfs.append(plotscat_df)
 
@@ -84,9 +84,10 @@ def interactive_polynomial(feat_X, feat_y, variable_names, measure_name):
     variable_names: [str], size equal to n_feature, name of each column.
     measure_name: str, name of the column to regression on.
     '''
-    num_exp = st.slider('Polynomial Exponantial', 1, 3, 2, 1)
-    n_iter = st.slider('Maximum Training Epoch', 0, 200, 100, 10)
-    learning_rate = st.slider('Learning Rate', 0.01, 0.25, 0.01, 0.01)
+    st.sidebar.markdown('### Tune the regression model with the widgets')
+    num_exp = st.sidebar.slider('Polynomial Exponantial', 1, 3, 2, 1)
+    n_iter = st.sidebar.slider('Maximum Training Epoch', 0, 200, 100, 10)
+    learning_rate = st.sidebar.slider('Learning Rate', 0.01, 0.25, 0.03, 0.01)
     # lam = st.slider('Lambda', 0.0, 2e-4, 1e-4, 1e-5)
 
     # scale the feature matrix.
@@ -106,7 +107,7 @@ def interactive_polynomial(feat_X, feat_y, variable_names, measure_name):
 
     # selector based on epoch
     epoch_selection = alt.selection_single(nearest=True, on='mouseover',
-                        fields=['Epoch'], empty='none')
+                        fields=['Epoch'], empty='none', init={'Epoch' : n_iter})
 
     # times-series for the loss
     loss_df = get_loss_df(losses, test_losses)
@@ -144,11 +145,11 @@ def interactive_polynomial(feat_X, feat_y, variable_names, measure_name):
         # residual points and the line plot together.
         residual_xy_plot = alt.Chart(residual_xy_df).mark_point().encode(
                 alt.X(var_name),
-                alt.Y(measure_name + " Residual on " + var_name)
+                alt.Y(measure_name + " | " + var_name)
             ).transform_filter(epoch_selection)
         plotline_plot = alt.Chart(plotline_df).mark_line().encode(
             alt.X(var_name),
-            alt.Y(measure_name + " Residual on " + var_name),
+            alt.Y(measure_name + " | " + var_name),
             color = alt.value('red')
         ).transform_filter(epoch_selection)
         curr_list.append(alt.layer(plotline_plot, residual_xy_plot).properties(width=200, height=200))
