@@ -22,7 +22,11 @@ def load_data():
 
 df = load_data()
 
-st.markdown('''Let's look at raw data containing different parameters of *yachts* in the Pandas Data Frame. 
+st.markdown('''We have some [Yacht Data](https://archive.ics.uci.edu/ml/datasets/Yacht+Hydrodynamics),
+let's see how we can predict the residuary resistance of sailing yachts from the other 6 features.''')
+
+
+st.markdown('''First let's take a look at the raw data of *yachts* in Pandas Data Frame.
 Our goal is to explore the relation between `Residuary resistance` of yachts and other variables.''')
 
 if st.checkbox('Raw Data'):
