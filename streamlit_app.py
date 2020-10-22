@@ -22,11 +22,13 @@ def load_data():
 
 df = load_data()
 
-st.write("Let's look at raw data in the Pandas Data Frame.")
+st.markdown('''Let's look at raw data containing different parameters of *yachts* in the Pandas Data Frame. 
+Our goal is to explore the relation between `Residuary resistance` of yachts and other variables.''')
 
-st.write(df)
+if st.checkbox('Raw Data'):
+    st.write(df)
 
-st.write("Hmm 🤔, how is the correlation between columns?")
+st.markdown('''- ### *Click* on correlation block to view that scatter plot!''')
 
 corr = df.corr()
 x, y = np.meshgrid(corr.index, corr.columns)
@@ -79,9 +81,11 @@ chart = alt.hconcat(
 
 st.write(chart)
 
-st.write("Hmm 🤔, is there some correlation between residuary resistance and other features?")
+st.markdown('''Hmm 🤔, although `Froude number` possess the strongest relation,
+               is there some correlation between `Residuary Resistance` and other features? ''') 
+st.markdown('''- ### Select other features to *brush & zoom in*, subtle patterns may appear.''')
 
-test = st.selectbox(options=df.columns[:-2], label='Feature selection')
+test = st.selectbox(options=df.columns[:-2], label='Feature selection', index=1)
 
 pts = alt.selection(type="interval", encodings=["x"])
 
@@ -116,6 +120,8 @@ chart = alt.hconcat(
 
 st.write(chart)
 
-st.write("Let's have fun with linear regression!")
+st.markdown('''## **Use polynomial regression to quantify the relations**''')
+st.markdown('''- **Use side bar to freely choose the model**''')
+st.markdown('''- **Simply move your mouse along X-axis on the chart below to view the fitting dynamics**''')
 
 interactive_polynomial(df.iloc[:, :-1].to_numpy(), df.iloc[:, -1].to_numpy(), df.columns[:-1], df.columns[-1])
