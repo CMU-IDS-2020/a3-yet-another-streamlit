@@ -4,12 +4,13 @@ import streamlit as st
 import altair as alt
 from multivariate_LR import LinearRegression
 from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
 
 # time-series data for losses
-def get_loss_df(losses):
+def get_loss_df(train_losses, test_losses):
     #  losses should be [float]
-    num_epoch = len(losses)
-    return pd.DataFrame({'Epoch' : range(num_epoch), 'MSE Loss' : losses})
+    num_epoch = len(test_losses)
+    return pd.DataFrame({'Epoch' : range(num_epoch), 'test MSE' : test_losses, 'train MSE' : train_losses})
 
 # multivariate-polynomial plot line points for each epoch each variable
 def get_plotline_df(x_range, num_var, num_exp, weights_on_epoch, variable_names, measure_name):
@@ -98,14 +99,18 @@ def interactive_polynomial(feat_X, feat_y, variable_names, measure_name):
     feat_X = np.concatenate(Xs, axis=1)
 
     lr_model = LinearRegression(lam=1e-4)
-    losses, weights_epochs = lr_model.fit(feat_X, feat_y, n_iter, learning_rate)
+
+
+    X_train, X_test, y_train, y_test = train_test_split(feat_X, feat_y, test_size=0.5, random_state=0)
+    losses, test_losses, weights_epochs = lr_model.fit(X_train, y_train, X_test, y_test, n_iter, learning_rate)
 
     # selector based on epoch
     epoch_selection = alt.selection_single(nearest=True, on='mouseover',
                         fields=['Epoch'], empty='none')
 
     # times-series for the loss
-    loss_df = get_loss_df(losses)
+    loss_df = get_loss_df(losses, test_losses)
+    loss_df = loss_df.melt('Epoch', var_name='loss', value_name='MSE')
     # selector layer
     selector_layer = alt.Chart(loss_df).mark_point().encode(
         alt.X('Epoch'),
@@ -113,8 +118,8 @@ def interactive_polynomial(feat_X, feat_y, variable_names, measure_name):
     ).add_selection(epoch_selection)
     loss_line = alt.Chart(loss_df).mark_line().encode(
         alt.X('Epoch'),
-        alt.Y('MSE Loss'),
-        color=alt.value('red')
+        alt.Y('MSE'),
+        color='loss:N'
     )
     ruleline = alt.Chart(loss_df).mark_rule().encode(
         alt.X('Epoch'),
@@ -122,15 +127,15 @@ def interactive_polynomial(feat_X, feat_y, variable_names, measure_name):
     ).transform_filter(epoch_selection)
     tooltip = alt.Chart(loss_df).mark_text(align='left', dx=5, dy=-5).encode(
         alt.X('Epoch'),
-        alt.Y('MSE Loss'),
-        alt.Text('MSE Loss')
+        alt.Y('MSE'),
+        alt.Text('MSE')
     ).transform_filter(epoch_selection)
 
     # st.write(alt.layer(selector_layer, loss_line, tooltip, ruleline).properties(width=700, height=300))
-    curr_chart = alt.layer(selector_layer, loss_line, tooltip, ruleline).properties(width=700, height=300)
+    curr_chart = alt.layer(selector_layer, loss_line, tooltip, ruleline).properties(width=700, height=300).resolve_scale(color='independent')
 
     # get the layered visualization of residual line plot and residual X-Y points.
-    residual_xy_df = get_residual_xy_df(feat_X, feat_y, len(variable_names), num_exp, weights_epochs, variable_names, measure_name)
+    residual_xy_df = get_residual_xy_df(X_test, y_test, len(variable_names), num_exp, weights_epochs, variable_names, measure_name)
     plotline_df = get_plotline_df(np.arange(-2.0, 2.0, 0.05), len(variable_names), num_exp, weights_epochs, variable_names, measure_name)
 
     # list the residual plot on each dimension, three in a row to look better.

@@ -36,9 +36,9 @@ class LinearRegression:
         
         regular_sum = np.square(self.theta).sum() * self.lam
         
-        return (error_sum + regular_sum) / (2 * n_samples)
+        return error_sum / n_samples
     
-    def fit(self, X, y, n_iters = 100, alpha = 0.01):
+    def fit(self, X, y, test_X, test_y, n_iters = 100, alpha = 0.01):
         """
         Train the model weights and intercept term using batch gradient descent.
         
@@ -58,15 +58,21 @@ class LinearRegression:
         
         # initial params and loss
         loss_values = []
+        test_loss_values = []
         weights_on_epochs = []
         n_samples, n_dimensions = X.shape
         self.theta = np.zeros(n_dimensions)
         self.b = 0.0
         
+        def err(X, y):
+            return np.square(self.predict(X) - y).sum() / y.shape[0]
+        
         h = self.predict(X)
         loss_values.append(self.loss(h, y))
+        test_loss_values.append(err(test_X, test_y))
         weights_on_epochs.append(self.get_params())
         
+
         # training
         for _ in range(n_iters):
             diff = h - y
@@ -85,10 +91,10 @@ class LinearRegression:
             
             h = self.predict(X)
             loss_values.append(self.loss(h, y))
+            test_loss_values.append(err(test_X, test_y))
             weights_on_epochs.append(self.get_params())
             
-        
-        return loss_values, weights_on_epochs
+        return loss_values, test_loss_values, weights_on_epochs
         
     def get_params(self):
         """
