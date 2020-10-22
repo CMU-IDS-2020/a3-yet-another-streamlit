@@ -48,7 +48,7 @@ text = base.mark_text().encode(
     text='text:O'
 )
 
-select = alt.selection_single(fields=['column-x', 'column-y'], init={'column-x': 'Froude number', 'column-y': 'Residuary resistance'})
+select = alt.selection_single(fields=['column-x', 'column-y'], init={'column-x': 'Froude number', 'column-y': 'Residuary resistance'}, empty='none')
 
 chart = base.mark_rect().encode(
     color='correlation:Q'
