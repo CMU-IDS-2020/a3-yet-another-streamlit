@@ -4,7 +4,20 @@ import altair as alt
 import numpy as np
 from interactive_polynomial import interactive_polynomial
 
-st.title("Let's analyze some Yacht Data ⛴📊.")
+st.title("Polynomial Regression on Yacht Hydrodynamics Data ⛴📊")
+
+st.markdown('''Let's see how we can predict the residuary resistance of sailing yachts from our features.
+
+In our [Yacht Hydrodynamics Data](https://archive.ics.uci.edu/ml/datasets/Yacht+Hydrodynamics),
+the prediction target is `Residuary resistance`, and the other 6 features are
+
+* Buoyancy position
+* Prismatic coefficient
+* Length-displacement ratio
+* Beam-draught ratio
+* Length-beam ratio
+* Froude number
+''')
 
 @st.cache  # add caching so we load the data only once
 def load_data():
@@ -22,17 +35,14 @@ def load_data():
 
 df = load_data()
 
-st.markdown('''We have some [Yacht Data](https://archive.ics.uci.edu/ml/datasets/Yacht+Hydrodynamics),
-let's see how we can predict the residuary resistance of sailing yachts from the other 6 features.''')
-
-
-st.markdown('''First let's take a look at the raw data of *yachts* in Pandas Data Frame.
-Our goal is to explore the relation between `Residuary resistance` of yachts and other variables.''')
-
 if st.checkbox('Raw Data'):
     st.write(df)
 
-st.markdown('''- ### *Click* on correlation block to view that scatter plot!''')
+st.markdown('''## **Data Exploration**''')
+
+st.markdown('''Let's first explore the relation between different columns!
+### *Click* on each correlation block to view the scatter plot for it.
+''')
 
 corr = df.corr()
 x, y = np.meshgrid(corr.index, corr.columns)
@@ -85,11 +95,11 @@ chart = alt.hconcat(
 
 st.write(chart)
 
-st.markdown('''Hmm 🤔, although `Froude number` possess the strongest relation,
-               is there some correlation between `Residuary Resistance` and other features? ''') 
-st.markdown('''- ### Select other features to *brush & zoom in*, subtle patterns may appear.''')
+st.markdown('''Hmm 🤔, our target has a strong correlation with `Froude number`.
+               Let's also visualize the patterns with other features together. ''') 
+st.markdown('''### Select a feature to *brush & zoom in*.''')
 
-test = st.selectbox(options=df.columns[:-2], label='Feature selection', index=1)
+test = st.selectbox(options=df.columns[:-2], label='Select a feature', index=1)
 
 pts = alt.selection(type="interval", encodings=["x"])
 
@@ -124,8 +134,9 @@ chart = alt.hconcat(
 
 st.write(chart)
 
-st.markdown('''## **Use polynomial regression to quantify the relations**''')
-st.markdown('''- **Use side bar to freely choose the model**''')
-st.markdown('''- **Simply move your mouse along X-axis on the chart below to view the fitting dynamics**''')
+st.markdown('''## **Polynomial Regression**''')
+st.markdown('''Let's use polynomial regression to make use of our features!''')
+st.markdown('''* Use the side bar to select the degree, max epoch, and learning rate of our models.
+* Simply move your mouse along X-axis on the chart below to see how our models fit the data.''')
 
 interactive_polynomial(df.iloc[:, :-1].to_numpy(), df.iloc[:, -1].to_numpy(), df.columns[:-1], df.columns[-1])
