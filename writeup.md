@@ -2,7 +2,7 @@
 
 ![A screenshot of your application. Could be a GIF.](screenshot.png)
 
-TODO: Short abstract describing the main goals and how you achieved them.
+In this application our goal is to present the machine learning process in an interactive way. We first perform some data analysis to understand the correlation between our target and features, then present a machine learning panel that visualizes the training process interactively.
 
 ## Project Goals
 
@@ -24,4 +24,17 @@ Interactions are present in both steps to help users actively acquire insights f
 
 ## Development
 
-TODO: **An overview of your development process.** Describe how the work was split among the team members. Include a commentary on the development process, including answers to the following questions: Roughly how much time did you spend developing your application (in people-hours)? What aspects took the most time?
+We have a productive collaboration. Lichen developed the machine learning panel section and Yijie developed the data exploration section. Roughly each of us spent 30 hours on this application. The most time-consuming part is development. We used Altair to visualize the dataset as a way to get familiar with both the data and Altair API. As we learned more about the dataset, we found better ways to hightlight our findings to users, so we iteratively improve our visualization through development.
+
+## Reference
+
+The dataset is hosted in UCI Machine Learning Repository. Dataset URL: http://archive.ics.uci.edu/ml/datasets/yacht+hydrodynamics
+
+Dua, D. and Graff, C. (2019). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.
+
+J. Gerritsma, R. Onnink, and A. Versluis. Geometry, resistance and stability of the delft systematic yacht hull series. In International Shipbuilding
+Progress, volume 28, pages 276-297, 1981.
+
+I. Ortigosa, R. Lopez and J. Garcia. A neural networks approach to residuary resistance of sailing
+yachts prediction. In Proceedings of the International Conference on Marine Engineering MARINE
+2007, 2007.
